@@ -1,15 +1,38 @@
 "use server";
 
-export async function login(formData: FormData): Promise<{ message: string }> {
+import { FormState, LoginFormSchema } from "../schemas/login";
+import { getAuthCookies } from "./auth-cookies";
+import { cookies } from "next/headers";
+
+export async function login(sate: FormState, formData: FormData) {
+  const validatedFields = LoginFormSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
   const res = await fetch(`${process.env.API_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(Object.fromEntries(formData)),
   });
 
-  if (!res.ok) {
-    return { message: "Error" };
+  if (res.ok) {
+    const cookie = getAuthCookies(res);
+    if (cookie?.accessToken) {
+      cookies().set(cookie.accessToken);
+    }
+    if (cookie?.refreshToken) {
+      cookies().set(cookie.refreshToken);
+    }
+    
+    return { success: true, message: "Bienvenido" };
+  } else {
+    return { success: false, message: "Contraseña o email invalido" };
   }
-
-  return { message: "Success" };
 }

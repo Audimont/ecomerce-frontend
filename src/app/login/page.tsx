@@ -1,36 +1,43 @@
 "use client";
 
 import { login } from "@/lib/actions/login";
+import { useEffect } from "react";
+import { useFormState } from "react-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 function Login() {
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
+  const [state, formAction] = useFormState(login, undefined);
 
-    const response = await login(formData);
+  useEffect(() => {
+    if (state?.message) {
+      if (state.success) {
+        toast.success(state.message);
 
-    if (response.message === "Error") {
-      toast.error("Error");
-    } else {
-      toast.success("Success");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
+      } else {
+        toast.error(state.message);
+      }
     }
+  }, [state]);
 
-    //Esperar a que el toast se cierre
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    form.reset();
-  };
+  useEffect(() => {
+    if (state?.errors?.email?.length) {
+      toast.error("Email inválido");
+    }
+  }, [state?.errors]);
+
   return (
     <section>
-      <Toaster position="top-center" />
+      <Toaster />
       <form
-        onSubmit={handleSubmit}
+        action={formAction}
         className="h-screen flex items-center justify-center flex-col gap-5"
       >
         <h1 className="text-3xl">Login</h1>
         <input
-          type="email"
+          type="text"
           name="email"
           className="input input-bordered w-full max-w-xs"
           placeholder="Email"
@@ -41,9 +48,7 @@ function Login() {
           className="input input-bordered w-full max-w-xs"
           placeholder="Password"
         />
-        <button typeof="submit" className="btn btn-primary w-full max-w-xs">
-          Login
-        </button>
+        <button className="btn btn-primary w-full max-w-xs">Login</button>
       </form>
     </section>
   );

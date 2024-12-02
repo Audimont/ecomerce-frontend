@@ -24,11 +24,11 @@ export async function login(sate: FormState, formData: FormData) {
 
   if (res.ok) {
     const cookie = getAuthCookies(res);
-    if (cookie?.accessToken) {
-      cookies().set(cookie.accessToken);
-    }
     if (cookie?.refreshToken) {
       cookies().set(cookie.refreshToken);
+    }
+    if (cookie?.accessToken) {
+      cookies().set(cookie.accessToken);
     }
     
     return { success: true, message: "Bienvenido" };

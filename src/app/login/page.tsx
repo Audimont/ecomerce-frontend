@@ -22,12 +22,6 @@ function Login() {
     }
   }, [state]);
 
-  useEffect(() => {
-    if (state?.errors?.email?.length) {
-      toast.error("Email inválido");
-    }
-  }, [state?.errors]);
-
   return (
     <section>
       <Toaster />
@@ -36,18 +30,25 @@ function Login() {
         className="h-screen flex items-center justify-center flex-col gap-5"
       >
         <h1 className="text-3xl">Login</h1>
-        <input
-          type="text"
-          name="email"
-          className="input input-bordered w-full max-w-xs"
-          placeholder="Email"
-        />
-        <input
-          type="password"
-          name="password"
-          className="input input-bordered w-full max-w-xs"
-          placeholder="Password"
-        />
+        <div className="w-full max-w-xs">
+          <input
+            type="text"
+            name="email"
+            className="input input-bordered w-full"
+            placeholder="Email"
+          />
+          {state?.errors?.email?.length && (
+            <p className="text-xs text-red-500 mt-2 ml-2">{state.errors.email[0]}</p>
+          )}
+        </div>
+        <div className="w-full max-w-xs">
+          <input
+            type="password"
+            name="password"
+            className="input input-bordered w-full"
+            placeholder="Contraseña"
+          />
+        </div>
         <button className="btn btn-primary w-full max-w-xs">Login</button>
       </form>
     </section>

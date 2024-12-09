@@ -1,6 +1,6 @@
 "use server";
 
-import { FormState, LoginFormSchema } from "../schemas/form";
+import { FormState, LoginFormSchema } from "@/lib/schemas/form";
 import { getAuthCookies } from "./auth-cookies";
 import { cookies } from "next/headers";
 

@@ -1,6 +1,6 @@
 "use server";
 
-import { FormState, SignupFormSchema } from "../schemas/form";
+import { FormState, SignupFormSchema } from "@/lib/schemas/form";
 
 export async function signup(sate: FormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({

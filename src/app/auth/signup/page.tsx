@@ -1,11 +1,11 @@
 "use client";
 
-import { signup } from "@/lib/actions/signup";
+import { signup } from "@/lib/actions/auth/signup";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-function Signup() {
+function SignupPage() {
   const [state, formAction] = useFormState(signup, undefined);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ function Signup() {
         toast.success(state.message);
 
         setTimeout(() => {
-          window.location.href = "/login";
+          window.location.href = "/auth/login";
         }, 1000);
       } else {
         toast.error(state.message);
@@ -65,7 +65,7 @@ function Signup() {
           />
           {state?.errors?.password?.length && (
             <div className="text-xs text-red-500 mt-2 ml-2 space-y-1">
-              {state.errors.password.map((error, index) => (
+              {state.errors.password.map((error: string, index: number) => (
                 <p key={index}>{error}</p>
               ))}
             </div>
@@ -90,4 +90,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignupPage;

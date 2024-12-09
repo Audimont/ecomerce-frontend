@@ -10,6 +10,7 @@ const unauthenticatedRoutes = [
   "/auth/login",
   "/auth/signup",
   "/auth/password-reset",
+  "/auth/email-verify",
 ];
 
 export async function middleware(request: NextRequest) {
